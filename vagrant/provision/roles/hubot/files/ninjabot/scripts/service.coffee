@@ -1,3 +1,4 @@
+
 # Description:
 #   Execute service actions (stop/start/restart/status)
 #
@@ -66,10 +67,12 @@ runCommand = (msg, cmd) ->
     if stdout? && stdout != ''
       stdout = stdout.replace /-classpath.*\n/, ""
       status = ""
-      if stdout.match("/Active: failed/")
-        status = ":red_circle:"
-      else
+      if stdout.search("Active: active") != -1
         status = ":white_check_mark:"
+      else if stdout.search("Active: activating") != -1
+        status = ":large_orange_diamond:"
+      else
+        status = ":red_circle:"
       respond msg, stdout, status
     if stderr? && stderr != ''
       respond msg, stderr, ":red_circle:"
